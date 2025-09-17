@@ -1,24 +1,29 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const getStatusStyle = (status) => {
   switch (status) {
     case "To do":
-      return { backgroundColor: "#f8d7da" }; // rosso chiaro
+      return { backgroundColor: "#f8d7da" };
     case "Doing":
-      return { backgroundColor: "#fff3cd" }; // giallo chiaro
+      return { backgroundColor: "#fff3cd" };
     case "Done":
-      return { backgroundColor: "#d4edda" }; // verde chiaro
+      return { backgroundColor: "#d4edda" };
     default:
       return {};
   }
 };
 
 const TaskRow = ({ task }) => {
-  const { title, status, createdAt } = task;
+  const { id, title, status, createdAt } = task;
 
   return (
     <tr>
-      <td>{title}</td>
+      <td>
+        <Link to={`/task/${id}`} className="text-decoration-none text-primary">
+          {title}
+        </Link>
+      </td>
       <td style={getStatusStyle(status)}>{status}</td>
       <td>{new Date(createdAt).toLocaleDateString()}</td>
     </tr>
