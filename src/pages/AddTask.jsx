@@ -1,12 +1,14 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import { GlobalContext } from "../context/GlobalContext";
 
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\\\",.<>?/`~";
 
-export default function AddTask() {
+const AddTask = () => {
   const [title, setTitle] = useState("");
   const [error, setError] = useState("");
   const descriptionRef = useRef();
   const statusRef = useRef();
+  const { addTask } = useContext(GlobalContext);
 
   const validateTitle = (value) => {
     if (!value.trim()) return "Il nome del task è obbligatorio.";
@@ -17,7 +19,7 @@ export default function AddTask() {
     return "";
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationError = validateTitle(title);
@@ -30,15 +32,18 @@ export default function AddTask() {
       title,
       description: descriptionRef.current.value,
       status: statusRef.current.value,
-      createdAt: new Date().toISOString(),
     };
 
-    console.log("Nuovo task:", newTask);
-
-    setError("");
-    setTitle("");
-    descriptionRef.current.value = "";
-    statusRef.current.value = "To do";
+    try {
+      await addTask(newTask);
+      alert("✅ Task creata con successo!");
+      setTitle("");
+      descriptionRef.current.value = "";
+      statusRef.current.value = "To do";
+      setError("");
+    } catch (err) {
+      alert(`❌ Errore: ${err.message}`);
+    }
   };
 
   return (
@@ -95,4 +100,6 @@ export default function AddTask() {
       </form>
     </div>
   );
-}
+};
+
+export default AddTask;
