@@ -53,8 +53,31 @@ export const useTasks = () => {
     }
   };
 
-  const updateTask = (updatedTask) => {
-    // da implementare
+  const updateTask = async (updatedTask) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/tasks/${updatedTask.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedTask),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setTasks((prev) =>
+          prev.map((task) => (task.id === updatedTask.id ? result.task : task))
+        );
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (err) {
+      throw new Error(err.message || "Errore nella modifica del task");
+    }
   };
 
   return {
