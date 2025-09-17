@@ -32,8 +32,25 @@ export const useTasks = () => {
     }
   };
 
-  const removeTask = (taskId) => {
-    // da implementare
+  const removeTask = async (taskId) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setTasks((prev) => prev.filter((task) => task.id !== taskId));
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (err) {
+      throw new Error(err.message || "Errore nella rimozione del task");
+    }
   };
 
   const updateTask = (updatedTask) => {
