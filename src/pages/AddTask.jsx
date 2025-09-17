@@ -3,5 +3,5 @@ export default function AddTask() {
     <div>
       <h1>Add Task</h1>
     </div>
-  )
+  );
 }

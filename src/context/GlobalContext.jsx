@@ -1,10 +1,11 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect } from "react";
+import { useTasks } from "../hooks/useTasks";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([]);
+  const { tasks, addTask, removeTask, updateTask } = useTasks();
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/tasks`)
@@ -17,7 +18,7 @@ export const GlobalProvider = ({ children }) => {
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ tasks, setTasks }}>
+    <GlobalContext.Provider value={{ tasks, addTask, removeTask, updateTask }}>
       {children}
     </GlobalContext.Provider>
   );
